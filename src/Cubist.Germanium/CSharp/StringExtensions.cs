@@ -1,6 +1,6 @@
 ﻿namespace Cubist.Germanium.CSharp;
 
-public static class StringExtensions
+internal static class StringExtensions
 {
     public static string ToPascalCase(this string str)
     {

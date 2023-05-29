@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Cubist.Germanium.CSharp;
 
-public static class TypeExtensions
+internal static class TypeExtensions
 {
     public static IReadOnlyDictionary<Type, string> KeywordTypes { get; } = new ConcurrentDictionary<Type, string>
     {

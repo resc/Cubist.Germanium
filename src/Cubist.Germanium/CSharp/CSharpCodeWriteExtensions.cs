@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cubist.Germanium.CSharp;
 
-public static class CSharpCodeWriteExtensions
+internal static class CSharpCodeWriteExtensions
 {
 
     public static Scope Namespace(this CodeWriter cw, string ns)

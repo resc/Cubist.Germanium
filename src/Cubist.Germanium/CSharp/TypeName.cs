@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Cubist.Germanium.CSharp;
 
-public sealed class TypeName : IEquatable<TypeName>
+internal sealed class TypeName : IEquatable<TypeName>
 {
     private const string ArraySuffix = "[]";
 

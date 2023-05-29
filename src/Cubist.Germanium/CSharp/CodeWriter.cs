@@ -6,7 +6,7 @@ using System.Text;
 namespace Cubist.Germanium.CSharp;
 
 /// <summary> CodeWriter keeps track of indentation and blocks, to simplify writing code. </summary>
-public class CodeWriter : TextWriter
+internal class CodeWriter : TextWriter
 { 
     private readonly TextWriter _w;
     private char _newline;

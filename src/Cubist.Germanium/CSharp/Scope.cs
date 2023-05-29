@@ -2,7 +2,7 @@ using System;
 
 namespace Cubist.Germanium.CSharp;
 
-public struct Scope : IDisposable
+internal struct Scope : IDisposable
 {
     private Action _action;
 
