@@ -46,7 +46,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         var hubType = GetTypeInfo(hubSymbol);
 
         if (hubSymbol.BaseType == null) return null;
-        var baseType = hubSymbol.BaseType;
+        var baseType = hubSymbol.BaseType;// SomeHub : Hub<T>, SomeInterface -> Hub<T>
         if (baseType.TypeParameters.Length != 1) return null;
         var clientTypeSymbol = baseType.TypeArguments[0] as INamedTypeSymbol; // Hub<T> -> T
         if (clientTypeSymbol == null) return null;
@@ -55,7 +55,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         var clientInterface = new InterfaceInfo(clientType, GetMethodInfo(clientType, clientTypeSymbol));
 
         if (hubSymbol.Interfaces.Length != 1) return null;
-        var serverTypeSymbol = hubSymbol.Interfaces[0];
+        var serverTypeSymbol = hubSymbol.Interfaces[0]; // SomeHub : Hub<T>, SomeInterface -> SomeInterface
         var serverType = GetTypeInfo(serverTypeSymbol);
         var serverInterface = new InterfaceInfo(serverType, GetMethodInfo(serverType, serverTypeSymbol));
         return new HubInfo(hubType, clientInterface, serverInterface);
