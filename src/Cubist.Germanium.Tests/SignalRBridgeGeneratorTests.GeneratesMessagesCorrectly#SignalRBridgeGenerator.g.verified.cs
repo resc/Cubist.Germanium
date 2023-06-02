@@ -67,7 +67,7 @@ namespace Test
             /// <summary>
             /// <see cref="SayCongratulation"> is derived from 
             /// <see cref="global::Test.ITestClient.SayCongratulation(global::System.String, global::System.DateTime)"></summary>
-            public record SayCongratulation(string ConnectionId, global::System.String Nameglobal::System.DateTime DateOfBirth)
+            public record SayCongratulation(string ConnectionId, global::System.String Name, global::System.DateTime DateOfBirth)
             {
                 public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients)
                     => hubClients.All.SayCongratulation(Name, DateOfBirth);
