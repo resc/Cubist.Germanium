@@ -205,6 +205,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
             source.WriteLine(");");
 
             source.WriteLine(@$"_actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);");
+            source.WriteLine("return global::System.Threading.Tasks.Task.CompletedTask;");
         }
         source.WriteLine();
     }

@@ -20,12 +20,14 @@ namespace Test
         {
             var msg = new ToServer.SayHello(Context.ConnectionId, Context.UserIdentifier, Context.User , name);
             _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
+            return global::System.Threading.Tasks.Task.CompletedTask;
         }
         
         public global::System.Threading.Tasks.Task SayBye(global::System.String name)
         {
             var msg = new ToServer.SayBye(Context.ConnectionId, Context.UserIdentifier, Context.User , name);
             _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
+            return global::System.Threading.Tasks.Task.CompletedTask;
         }
         
         public static class ToClient
