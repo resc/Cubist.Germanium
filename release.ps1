@@ -12,6 +12,7 @@ if($LASTEXITCODE -ne  0) {
     exit 1 
 }
 
+
 # check if unit tests pass
 dotnet test ./src/src.sln
 if ($LASTEXITCODE -ne 0) { 
@@ -26,6 +27,7 @@ while ( -not ($releaseVersion -match '^\d+\.\d+\.\d+$')) {
 }
 $releaseVersion = "v$releaseVersion"
 
+git tag $releaseVersion
+git push origin $releaseVersion
 
-# git tag $releaseVersion
-# git push origin $releaseVersion
+gh release create $releaseVersion --verify-tag -t $releaseVersion
