@@ -18,13 +18,13 @@ namespace Test
         
         public global::System.Threading.Tasks.Task SayHello(global::System.String name)
         {
-            var msg = new ToServer.SayHello(Context.ConnectionId, Context.UserIdentifier, Context.User, name);
+            var msg = new ToServer.SayHello(Context.ConnectionId, Context.UserIdentifier, Context.User , name);
             _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
         }
         
         public global::System.Threading.Tasks.Task SayBye(global::System.String name)
         {
-            var msg = new ToServer.SayBye(Context.ConnectionId, Context.UserIdentifier, Context.User, name);
+            var msg = new ToServer.SayBye(Context.ConnectionId, Context.UserIdentifier, Context.User , name);
             _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
         }
         
@@ -33,7 +33,7 @@ namespace Test
             /// <summary>
             /// <see cref="SayHello"> is derived from 
             /// <see cref="global::Test.ITestClient.SayHello(global::System.String)"></summary>
-            public record SayHello(string ConnectionId, global::System.String Name);
+            public record SayHello(string ConnectionId, global::System.String Name)
             {
                 public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients)
                     => hubClients.All.SayHello(Name);
@@ -67,7 +67,7 @@ namespace Test
             /// <summary>
             /// <see cref="SayCongratulation"> is derived from 
             /// <see cref="global::Test.ITestClient.SayCongratulation(global::System.String, global::System.DateTime)"></summary>
-            public record SayCongratulation(string ConnectionId, global::System.String Nameglobal::System.DateTime DateOfBirth);
+            public record SayCongratulation(string ConnectionId, global::System.String Nameglobal::System.DateTime DateOfBirth)
             {
                 public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients)
                     => hubClients.All.SayCongratulation(Name, DateOfBirth);
@@ -106,7 +106,7 @@ namespace Test
             /// <summary>
             /// <see cref="SayHello"> is derived from 
             /// <see cref="global::Test.ITestServer.SayHello(global::System.String)"></summary>
-            public record SayHello(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
+            public record SayHello(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name)
             {
                 public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients)
                     => hubClients.All.SayHello(Name);
@@ -140,7 +140,7 @@ namespace Test
             /// <summary>
             /// <see cref="SayBye"> is derived from 
             /// <see cref="global::Test.ITestServer.SayBye(global::System.String)"></summary>
-            public record SayBye(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
+            public record SayBye(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name)
             {
                 public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients)
                     => hubClients.All.SayBye(Name);
