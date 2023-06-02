@@ -154,14 +154,14 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
                 source.WriteLine($"public static class ToClient");
                 using (source.Block())
                 {
-                    WriteMessages(source,MessageDirection.ToClient, hub.ClientInterface);
+                    WriteMessages(source, MessageDirection.ToClient, hub.ClientInterface);
                 }
                 source.WriteLine();
                 source.WriteLine();
                 source.WriteLine($"public static class ToServer");
                 using (source.Block())
                 {
-                    WriteMessages(source,MessageDirection.ToServer, hub.ServerInterface);
+                    WriteMessages(source, MessageDirection.ToServer, hub.ServerInterface);
                 }
                 source.WriteLine();
                 source.WriteLine();
@@ -203,7 +203,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
                 source.Write($"{p.Name}");
             }
             source.WriteLine(");");
-            
+
             source.WriteLine(@$"_actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);");
         }
         source.WriteLine();
@@ -235,16 +235,17 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         switch (direction)
         {
             case MessageDirection.ToClient:
-                source.Write($"string ConnectionId, ");
+                source.Write($"string ConnectionId");
                 break;
             case MessageDirection.ToServer:
                 source.Write($"string ConnectionId, ");
                 source.Write($"string UserIdentifier, ");
-                source.Write($"global::System.Security.Claims.ClaimsPrincipal User, ");
+                source.Write($"global::System.Security.Claims.ClaimsPrincipal User");
                 break;
         }
         for (int i = 0; i < method.Parameters.Length; i++)
         {
+            source.Write(", ");
             var p = method.Parameters[i];
             source.Write($"{p.Type.ToGlobalName()} {p.Name.ToPascalCase()}");
         }
@@ -252,7 +253,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
 
         using (source.Block())
         {
-            
+
             var hubClients = "hubClients";
             var hubClientsParam = "global::Microsoft.AspNetCore.SignalR.IHubClients<" + method.DeclaringType.ToGlobalName() + "> " + hubClients;
             var methodArgs = string.Join(", ", method.Parameters.Select(p => p.Name.ToPascalCase()));
@@ -263,11 +264,11 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
             source.WriteLine($"public {returnType} CallOnClients({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)\n{source.IndentText}=> {hubClients}.Clients(connectionIds).{method.Name}({methodArgs});\n");
             source.WriteLine($"public {returnType} CallOnGroup({hubClientsParam}, string groupName)\n{source.IndentText}=> {hubClients}.Group(groupName).{method.Name}({methodArgs});\n");
             source.WriteLine($"public {returnType} CallOnGroups({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> groupNames)\n{source.IndentText}=> {hubClients}.Groups(groupNames).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnGroupExcept({hubClientsParam}, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)\n{source.IndentText}=> {hubClients}.GroupExcept(groupName, excludedConnectionIds).{method.Name}({methodArgs});\n"); 
+            source.WriteLine($"public {returnType} CallOnGroupExcept({hubClientsParam}, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)\n{source.IndentText}=> {hubClients}.GroupExcept(groupName, excludedConnectionIds).{method.Name}({methodArgs});\n");
             source.WriteLine($"public {returnType} CallOnUser({hubClientsParam}, string userId)\n{source.IndentText}=> {hubClients}.User(userId).{method.Name}({methodArgs});\n");
             source.WriteLine($"public {returnType} CallOnUsers({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> userIds)\n{source.IndentText}=> {hubClients}.Users(userIds).{method.Name}({methodArgs});\n");
         }
-        
+
     }
 
     private enum MessageDirection
