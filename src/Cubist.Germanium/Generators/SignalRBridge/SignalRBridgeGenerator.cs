@@ -248,7 +248,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
             var p = method.Parameters[i];
             source.Write($"{p.Type.ToGlobalName()} {p.Name.ToPascalCase()}");
         }
-        source.WriteLine(");");
+        source.WriteLine(")");
 
         using (source.Block())
         {
