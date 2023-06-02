@@ -1,11 +1,13 @@
 # check if there are uncomitted changes
-if(0 -ne (git diff --quiet --exit-code)) { 
+git diff --quiet --exit-code
+if($LASTEXITCODE -ne  0) { 
     Write-Error "There are uncomitted changes. Aborting release."
     exit 1 
 }
 
 # check if there are staged changes
-if(0 -ne  (git diff --quiet --cached --exit-code)) { 
+git diff --cached --quiet --exit-code
+if($LASTEXITCODE -ne  0) { 
     Write-Error "There are staged changes. Aborting release."
     exit 1 
 }
