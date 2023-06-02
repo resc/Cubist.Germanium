@@ -21,8 +21,8 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # get the release version from the user
-Write-Host "Current versions:"
-git tag --list "v*" --sort=-version:refname --column
+Write-Host "Latest releases:"
+gh release list -L 5
 
 $releaseVersion = '' 
 while ( -not ($releaseVersion -match '^\d+\.\d+\.\d+$')) { 
@@ -30,8 +30,8 @@ while ( -not ($releaseVersion -match '^\d+\.\d+\.\d+$')) {
 }
 $releaseVersion = "v$releaseVersion"
 
-
 git tag $releaseVersion
+
 git push origin $releaseVersion
 
-gh release create $releaseVersion --verify-tag -t $releaseVersion
+gh release create $releaseVersion --verify-tag --generate-notes
