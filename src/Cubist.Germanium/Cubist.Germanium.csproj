@@ -8,6 +8,7 @@
 		<IncludeSymbols>True</IncludeSymbols>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 
 		<Title>$(AssemblyName) Source Generators</Title>
 		<Authors>Remco Schoeman</Authors>

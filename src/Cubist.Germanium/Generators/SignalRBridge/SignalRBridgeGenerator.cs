@@ -62,8 +62,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         if (baseType.TypeParameters.Length != 1) return null;
 
         // verify the client interface
-        var clientTypeSymbol = baseType.TypeArguments[0] as INamedTypeSymbol; // Hub<T> -> T
-        if (clientTypeSymbol == null) return null;
+        if (baseType.TypeArguments[0] is not INamedTypeSymbol clientTypeSymbol) return null;
 
         // construct the client interface info
         var clientType = GetTypeInfo(clientTypeSymbol);
@@ -129,7 +128,7 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         context.AddSource($"{nameof(SignalRBridgeGenerator)}.g.cs", source.ToString());
     }
 
-    private void GenerateHubImplementation(SourceProductionContext context, CodeWriter source, HubInfo hub)
+    private void GenerateHubImplementation(SourceProductionContext _, CodeWriter source, HubInfo hub)
     {
         source.WriteLine();
 
@@ -180,14 +179,14 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
         }
     }
 
-    private void WriteMethodImpl(CodeWriter source, HubInfo hub, MethodInfo method)
+    private void WriteMethodImpl(CodeWriter source, HubInfo _, MethodInfo method)
     {
         source.Write($"public global::{method.ReturnType.Namespace}.{method.ReturnType.Name} {method.Name}(");
         for (int i = 0; i < method.Parameters.Length; i++)
         {
             if (i > 0) source.Write(", ");
             var p = method.Parameters[i];
-            source.Write($"global::{p.Type.Namespace}.{p.Type.Name} {p.Name}");
+            source.Write($"{p.Type.ToGlobalName()} {p.Name}");
         }
         source.WriteLine(")");
         using (source.Block())
@@ -195,11 +194,11 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
             source.Write($"var msg = new ToServer.{method.Name}(");
             source.Write("Context.ConnectionId, ");
             source.Write("Context.UserIdentifier, ");
-            source.Write("Context.User, ");
+            source.Write("Context.User ");
 
             for (int i = 0; i < method.Parameters.Length; i++)
             {
-                if (i > 0) source.Write(", ");
+                source.Write(", ");
                 var p = method.Parameters[i];
                 source.Write($"{p.Name}");
             }
