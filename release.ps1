@@ -1,3 +1,13 @@
+$releaseBranch = 'master'
+
+$currentBranch = git branch --show-current
+
+# check if the current branch is the release branch
+if ($currentBranch -ne $releaseBranch) { 
+    Write-Error "You are not on the release branch '$releaseBranch'. Aborting release."
+    exit 1 
+}
+
 # check if there are uncomitted changes
 git diff --quiet --exit-code
 if($LASTEXITCODE -ne  0) { 
@@ -27,12 +37,12 @@ $releaseVersion = ''
 while ( -not ($releaseVersion -match '^\d+\.\d+\.\d+$')) { 
     $releaseVersion = Read-Host -Prompt 'Enter release version (e.g. 1.0.0) '
 }
-$releaseVersion = "v$releaseVersion"
+$releaseTag = "v$releaseVersion"
 
-git tag $releaseVersion
+git tag $releaseTag
 
 # push the current branch and the tag
-git push origin HEAD
-git push origin $releaseVersion
+git push origin $releaseBranch
+git push origin $releaseTag
 
-gh release create $releaseVersion --verify-tag --generate-notes
+gh release create $releaseTag --verify-tag --generate-notes
