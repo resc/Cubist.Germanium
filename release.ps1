@@ -21,11 +21,15 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # get the release version from the user
+Write-Host "Current versions:"
+git tag --list "v*" --sort=-version:refname --column
+
 $releaseVersion = '' 
 while ( -not ($releaseVersion -match '^\d+\.\d+\.\d+$')) { 
-    $releaseVersion = Read-Host -Prompt 'Enter release version (e.g. 1.0.0): '
+    $releaseVersion = Read-Host -Prompt 'Enter release version (e.g. 1.0.0) '
 }
 $releaseVersion = "v$releaseVersion"
+
 
 git tag $releaseVersion
 git push origin $releaseVersion
