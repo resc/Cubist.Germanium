@@ -3,26 +3,176 @@
 // 1 hub found
 
 
-/*
-    namespace Test
+namespace Test
+{
+    public partial class TestHub
     {
-        public partial class TestHub
+        public const string HubDispatcherActorSelection = "/user/signalr/testhub";
+        
+        private readonly global::Akka.Actor.ActorSystem _actorSystem;
+        
+        public TestHub(global::Akka.Actor.ActorSystem actorSystem)
         {
-            public static class ToClient
+            _actorSystem = actorSystem ?? throw new ArgumentNullException(nameof(actorSystem));
+        }
+        
+        public global::System.Threading.Tasks.Task SayHello(global::System.String name)
+        {
+            var msg = new ToServer.SayHello(Context.ConnectionId, Context.UserIdentifier, Context.User, name);
+            _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
+        }
+        
+        public global::System.Threading.Tasks.Task SayBye(global::System.String name)
+        {
+            var msg = new ToServer.SayBye(Context.ConnectionId, Context.UserIdentifier, Context.User, name);
+            _actorSystem.ActorSelection(HubDispatcherActorSelection).Tell(msg);
+        }
+        
+        public static class ToClient
+        {
+            /// <summary>
+            /// <see cref="SayHello"> is derived from 
+            /// <see cref="global::Test.ITestClient.SayHello(global::System.String)"></summary>
+            public record SayHello(string ConnectionId, global::System.String Name);
             {
-                /// <summary>
-                /// <see cref="SayHello"> is derived from 
-                /// <see cref="global::Test.ITestClient.SayHello(global::System.String)"></summary>
-                public record SayHello(global::System.String Name);
+                public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients)
+                    => hubClients.All.SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnAllExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.AllExcept(excludedConnectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClient(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string connectionId)
+                    => hubClients.Client(connectionId).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClients(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)
+                    => hubClients.Clients(connectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroup(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string groupName)
+                    => hubClients.Group(groupName).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroups(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> groupNames)
+                    => hubClients.Groups(groupNames).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroupExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.GroupExcept(groupName, excludedConnectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUser(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string userId)
+                    => hubClients.User(userId).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUsers(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> userIds)
+                    => hubClients.Users(userIds).SayHello(Name);
+                
             }
             
-            public static class ToServer
+            /// <summary>
+            /// <see cref="SayCongratulation"> is derived from 
+            /// <see cref="global::Test.ITestClient.SayCongratulation(global::System.String, global::System.DateTime)"></summary>
+            public record SayCongratulation(string ConnectionId, global::System.String Nameglobal::System.DateTime DateOfBirth);
             {
-                /// <summary>
-                /// <see cref="SayBye"> is derived from 
-                /// <see cref="global::Test.ITestServer.SayBye(global::System.String)"></summary>
-                public record SayBye(global::System.String Name);
+                public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients)
+                    => hubClients.All.SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnAllExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.AllExcept(excludedConnectionIds).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnClient(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string connectionId)
+                    => hubClients.Client(connectionId).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnClients(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)
+                    => hubClients.Clients(connectionIds).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnGroup(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string groupName)
+                    => hubClients.Group(groupName).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnGroups(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> groupNames)
+                    => hubClients.Groups(groupNames).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnGroupExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.GroupExcept(groupName, excludedConnectionIds).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnUser(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, string userId)
+                    => hubClients.User(userId).SayCongratulation(Name, DateOfBirth);
+                
+                public global::System.Threading.Tasks.Task CallOnUsers(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestClient> hubClients, global::System.Collections.Generic.IReadOnlyList<string> userIds)
+                    => hubClients.Users(userIds).SayCongratulation(Name, DateOfBirth);
+                
             }
+            
         }
+        
+        
+        public static class ToServer
+        {
+            /// <summary>
+            /// <see cref="SayHello"> is derived from 
+            /// <see cref="global::Test.ITestServer.SayHello(global::System.String)"></summary>
+            public record SayHello(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
+            {
+                public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients)
+                    => hubClients.All.SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnAllExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.AllExcept(excludedConnectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClient(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string connectionId)
+                    => hubClients.Client(connectionId).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClients(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)
+                    => hubClients.Clients(connectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroup(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string groupName)
+                    => hubClients.Group(groupName).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroups(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> groupNames)
+                    => hubClients.Groups(groupNames).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroupExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.GroupExcept(groupName, excludedConnectionIds).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUser(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string userId)
+                    => hubClients.User(userId).SayHello(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUsers(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> userIds)
+                    => hubClients.Users(userIds).SayHello(Name);
+                
+            }
+            
+            /// <summary>
+            /// <see cref="SayBye"> is derived from 
+            /// <see cref="global::Test.ITestServer.SayBye(global::System.String)"></summary>
+            public record SayBye(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
+            {
+                public global::System.Threading.Tasks.Task CallOnAll(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients)
+                    => hubClients.All.SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnAllExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.AllExcept(excludedConnectionIds).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClient(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string connectionId)
+                    => hubClients.Client(connectionId).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnClients(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)
+                    => hubClients.Clients(connectionIds).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroup(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string groupName)
+                    => hubClients.Group(groupName).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroups(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> groupNames)
+                    => hubClients.Groups(groupNames).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnGroupExcept(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)
+                    => hubClients.GroupExcept(groupName, excludedConnectionIds).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUser(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, string userId)
+                    => hubClients.User(userId).SayBye(Name);
+                
+                public global::System.Threading.Tasks.Task CallOnUsers(global::Microsoft.AspNetCore.SignalR.IHubClients<global::Test.ITestServer> hubClients, global::System.Collections.Generic.IReadOnlyList<string> userIds)
+                    => hubClients.Users(userIds).SayBye(Name);
+                
+            }
+            
+        }
+        
+        
     }
-*/
+}

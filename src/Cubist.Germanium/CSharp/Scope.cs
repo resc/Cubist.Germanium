@@ -4,7 +4,7 @@ namespace Cubist.Germanium.CSharp;
 
 internal struct Scope : IDisposable
 {
-    private Action _action;
+    private Action? _action;
 
     public static Scope Empty { get; } = new();
 

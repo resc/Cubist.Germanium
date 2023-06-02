@@ -90,10 +90,7 @@ internal sealed class TypeName : IEquatable<TypeName>
 
     public string FullName { get; }
 
-    public bool IsArrayType
-    {
-        get { return Name.EndsWith(ArraySuffix); }
-    }
+    public bool IsArrayType => Name.EndsWith(ArraySuffix);
 
     public TypeName GetElementType()
     {
@@ -106,16 +103,16 @@ internal sealed class TypeName : IEquatable<TypeName>
         return new(Namespace, Name + ArraySuffix);
     }
 
-    public bool Equals(TypeName other)
+    public bool Equals(TypeName? other)
     {
-        if (null == other) return false;
+        if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
         return FullName == other.FullName;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (null == obj) return false;
+        if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != GetType()) return false;
         return Equals((TypeName)obj);

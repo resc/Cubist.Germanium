@@ -78,7 +78,7 @@ internal class CodeWriter : TextWriter
 
     /// <summary> Writes a block </summary>
     /// <param name="trailer">text to immediatly follow the closing brace, before the newline. usually a ;</param>
-    public Scope Block(string trailer = null)
+    public Scope Block(string? trailer = null)
     {
         WriteLine(BlockStart);
         var d = Indent();

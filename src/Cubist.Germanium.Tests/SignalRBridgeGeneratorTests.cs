@@ -10,25 +10,45 @@ public class SignalRBridgeGeneratorTests
     public Task GeneratesMessagesCorrectly()
     {
         // The source code to test
-        var source = @" 
-namespace Test;
+        var clientSource = """
+            using System.Threading.Tasks;
 
-public interface ITestClient
-{
-    Task SayHello(string name);
-}
+            namespace Test;
+            
+            public interface ITestClient
+            {
+                Task SayHello(string name);
+                Task SayCongratulation(string name, System.DateTime dateOfBirth);
+            }
+            """;
 
-public interface ITestServer
-{
-    Task SayBye(string name);
-}
+        var serverSource = """
+            using System.Threading.Tasks;
 
-public partial class TestHub : Hub<ITestClient>, ITestServer
-{
-    
-}";
+            namespace Test;
+            
+            public interface ITestServer
+            {
+                Task SayHello(string name);
+                Task SayBye(string name);
+            }
+            """;
+
+        var hubSource = """ 
+            using Microsoft.AspNetCore.SignalR;
+
+            namespace Test;
+
+            public partial class TestHub : Hub<ITestClient>, ITestServer
+            {
+                
+            }
+            """;
 
         // Pass the source code to our helper and snapshot test the output
-        return TestHelper.Verify(source, new SignalRBridgeGenerator());
+        return TestHelper.Verify(new SignalRBridgeGenerator(), 
+            (clientSource, $"{nameof(clientSource)}.cs"),
+            (serverSource, $"{nameof(serverSource)}.cs"),
+            (hubSource, $"{nameof(hubSource)}.cs"));
     }
 }
