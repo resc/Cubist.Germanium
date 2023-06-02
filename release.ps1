@@ -32,6 +32,6 @@ $releaseVersion = "v$releaseVersion"
 
 git tag $releaseVersion
 
-git push origin $releaseVersion
+git push --all
 
 gh release create $releaseVersion --verify-tag --generate-notes
