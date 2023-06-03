@@ -47,7 +47,7 @@ namespace Test
             /// <see cref="global::Test.ITestClient.SayCongratulation(global::System.String, global::System.DateTime)"></summary>
             public record SayCongratulation(string ConnectionId, global::System.String Name, global::System.DateTime DateOfBirth)
             {
-                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::Microsoft.AspNetCore.SignalR.IClientProxy cancellationToken = default)
+                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::System.Threading.CancellationToken cancellationToken = default)
                     => clientProxy.SendAsync("SayCongratulation", Name, DateOfBirth, cancellationToken);
                 
             }
