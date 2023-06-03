@@ -5,6 +5,12 @@
 
 namespace Test
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Security.Claims;
+    using Microsoft.AspNetCore.SignalR;
+    
     public partial class TestHub
     {
         public const string HubDispatcherActorSelection = "/user/signalr/testhub";

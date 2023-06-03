@@ -134,6 +134,12 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
 
         using (source.Namespace(hub.Type.Namespace.TrimPrefix("global::")))
         {
+            source.Using("System");
+            source.Using("System.Threading");
+            source.Using("System.Threading.Tasks");
+            source.Using("System.Security.Claims");
+            source.Using("Microsoft.AspNetCore.SignalR");
+            source.WriteLine();
             source.WriteLine($"public partial class {hub.Type.Name}");
             using (source.Block())
             {
