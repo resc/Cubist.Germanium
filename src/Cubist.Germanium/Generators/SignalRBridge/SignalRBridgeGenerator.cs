@@ -250,24 +250,24 @@ public class SignalRBridgeGenerator : IIncrementalGenerator
             var p = method.Parameters[i];
             source.Write($"{p.Type.ToGlobalName()} {p.Name.ToPascalCase()}");
         }
-        source.WriteLine(")");
-
-        using (source.Block())
+        source.Write(")");
+        if (direction == MessageDirection.ToClient)
         {
-
-            var hubClients = "hubClients";
-            var hubClientsParam = "global::Microsoft.AspNetCore.SignalR.IHubClients<" + method.DeclaringType.ToGlobalName() + "> " + hubClients;
-            var methodArgs = string.Join(", ", method.Parameters.Select(p => p.Name.ToPascalCase()));
-            var returnType = method.ReturnType.ToGlobalName();
-            source.WriteLine($"public {returnType} CallOnAll({hubClientsParam})\n{source.IndentText}=> {hubClients}.All.{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnAllExcept({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)\n{source.IndentText}=> {hubClients}.AllExcept(excludedConnectionIds).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnClient({hubClientsParam}, string connectionId)\n{source.IndentText}=> {hubClients}.Client(connectionId).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnClients({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> connectionIds)\n{source.IndentText}=> {hubClients}.Clients(connectionIds).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnGroup({hubClientsParam}, string groupName)\n{source.IndentText}=> {hubClients}.Group(groupName).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnGroups({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> groupNames)\n{source.IndentText}=> {hubClients}.Groups(groupNames).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnGroupExcept({hubClientsParam}, string groupName, global::System.Collections.Generic.IReadOnlyList<string> excludedConnectionIds)\n{source.IndentText}=> {hubClients}.GroupExcept(groupName, excludedConnectionIds).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnUser({hubClientsParam}, string userId)\n{source.IndentText}=> {hubClients}.User(userId).{method.Name}({methodArgs});\n");
-            source.WriteLine($"public {returnType} CallOnUsers({hubClientsParam}, global::System.Collections.Generic.IReadOnlyList<string> userIds)\n{source.IndentText}=> {hubClients}.Users(userIds).{method.Name}({methodArgs});\n");
+            source.WriteLine();
+            using (source.Block())
+            {
+                var clientProxy = "clientProxy";
+                var clientProxyParam = "global::Microsoft.AspNetCore.SignalR.IClientProxy " + clientProxy;
+                var cancellationToken = "cancellationToken";
+                var cancellationTokenParam = $"global::System.Threading.CancellationToken {cancellationToken} = default";
+                var methodArgs = string.Join(", ", method.Parameters.Select(p => p.Name.ToPascalCase()));
+                var returnType = method.ReturnType.ToGlobalName();
+                source.WriteLine($"public {returnType} Invoke({clientProxyParam}, {cancellationTokenParam})\n{source.IndentText}=> {clientProxy}.SendAsync(\"{method.Name}\", {methodArgs}, cancellationToken);\n");
+            }
+        }
+        else
+        {
+            source.WriteLine(";");
         }
 
     }

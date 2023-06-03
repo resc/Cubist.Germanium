@@ -37,7 +37,7 @@ namespace Test
             /// <see cref="global::Test.ITestClient.SayHello(global::System.String)"></summary>
             public record SayHello(string ConnectionId, global::System.String Name)
             {
-                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::Microsoft.AspNetCore.SignalR.IClientProxy cancellationToken = default)
+                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::System.Threading.CancellationToken cancellationToken = default)
                     => clientProxy.SendAsync("SayHello", Name, cancellationToken);
                 
             }
@@ -47,7 +47,7 @@ namespace Test
             /// <see cref="global::Test.ITestClient.SayCongratulation(global::System.String, global::System.DateTime)"></summary>
             public record SayCongratulation(string ConnectionId, global::System.String Name, global::System.DateTime DateOfBirth)
             {
-                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::Microsoft.AspNetCore.SignalR.IClientProxy cancellationToken = default)
+                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::System.Threading.CancellationToken cancellationToken = default)
                     => clientProxy.SendAsync("SayCongratulation", Name, DateOfBirth, cancellationToken);
                 
             }
@@ -60,21 +60,12 @@ namespace Test
             /// <summary>
             /// <see cref="SayHello"> is derived from 
             /// <see cref="global::Test.ITestServer.SayHello(global::System.String)"></summary>
-            public record SayHello(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name)
-            {
-                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::Microsoft.AspNetCore.SignalR.IClientProxy cancellationToken = default)
-                    => clientProxy.SendAsync("SayHello", Name, cancellationToken);
-            }
+            public record SayHello(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
             
             /// <summary>
             /// <see cref="SayBye"> is derived from 
             /// <see cref="global::Test.ITestServer.SayBye(global::System.String)"></summary>
-            public record SayBye(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name)
-            {
-                public global::System.Threading.Tasks.Task Invoke(global::Microsoft.AspNetCore.SignalR.IClientProxy clientProxy, global::Microsoft.AspNetCore.SignalR.IClientProxy cancellationToken = default)
-                    => clientProxy.SendAsync("SayBye", Name, cancellationToken);
-                
-            }
+            public record SayBye(string ConnectionId, string UserIdentifier, global::System.Security.Claims.ClaimsPrincipal User, global::System.String Name);
             
         }
         
